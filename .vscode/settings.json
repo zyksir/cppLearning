@@ -73,6 +73,11 @@
         "future": "cpp",
         "iterator": "cpp",
         "utility": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "deque": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }
