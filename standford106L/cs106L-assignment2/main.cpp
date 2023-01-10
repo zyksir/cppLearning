@@ -41,9 +41,7 @@ using std::unordered_set;   using std::cin;
 // BEGIN STUDENT CODE HERE
 int numCommonLinks(const unordered_set<string>& curr_set, const unordered_set<string>& target_set) {
     // replace all of these lines!
-    (void) target_set;
-    (void) curr_set;
-    return 0; 
+    return std::count_if(target_set.begin(), target_set.end(), [&curr_set](const string& s) { return curr_set.count(s) > 0; });; 
 }
 // END STUDENT CODE HERE
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,11 +63,11 @@ vector<string> findWikiLadder(const string& start_page, const string& end_page) 
     // BEGIN STUDENT CODE HERE
     auto cmp_fn = [&w, &target_set](const vector<string>& left, const vector<string>& right) {
         // replace all of these lines.
-        (void) w;
-        (void) target_set;
-        (void) left;
-        (void) right;
-        return false; // replace this line! make sure to use numCommonLinks.
+        auto left_set = w.getLinkSet(left.back());
+        auto left_common_links = numCommonLinks(left_set, target_set);
+        auto right_set = w.getLinkSet(right.back());
+        auto right_common_links = numCommonLinks(right_set, target_set);
+        return left_common_links < right_common_links; // replace this line! make sure to use numCommonLinks.
     };
     // END STUDENT CODE HERE
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,14 +76,15 @@ vector<string> findWikiLadder(const string& start_page, const string& end_page) 
     // Last exercise! please instantiate the priority queue for this algorithm, called "queue". Be sure 
     // to use your work from Task 2, cmp_fn, to instantiate our queue. 
     // Estimated length: 1 line
+    std::priority_queue<vector<string>, vector<vector<string>>, decltype(cmp_fn)> queue(cmp_fn);
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // BEGIN STUDENT CODE HERE
     // something like priority_queue<...> queue(...);
     // please delete ALL 4 of these lines! they are here just for the code to compile.
-    std::priority_queue<vector<string>> queue;
-    throw std::invalid_argument("Not implemented yet.\n");
-    return {};
+    // std::priority_queue<vector<string>> queue;
+    // throw std::invalid_argument("Not implemented yet.\n");
+    // return {};
 
     // END STUDENT CODE HERE
     ///////////////////////////////////////////////////////////////////////////////////////////////////
