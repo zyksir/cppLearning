@@ -67,8 +67,13 @@ void HashMap<K, M, H>::clear() {
 }
 
 template <typename K, typename M, typename H>
-typename HashMap<K, M, H>::iterator HashMap<K, M, H>::find(const K& key) const {
+typename HashMap<K, M, H>::iterator HashMap<K, M, H>::find(const K& key) {
     return make_iterator(find_node(key).second);
+}
+
+template <typename K, typename M, typename H>
+typename HashMap<K, M, H>::const_iterator HashMap<K, M, H>::find(const K& key) const {
+    return static_cast<const_iterator>(const_cast<HashMap<K, M, H>*>(this)->find(key));
 }
 
 template <typename K, typename M, typename H>
@@ -88,20 +93,30 @@ std::pair<typename HashMap<K, M, H>::iterator, bool> HashMap<K, M, H>::insert(co
     return {make_iterator(temp), true};
 }
 
+// copy constructor
 template <typename K, typename M, typename H>
-HashMap<K, M, H>& HashMap<K, M, H>::operator=(const HashMap<K, M, H>& rhs) {
+HashMap<K, M, H>::HashMap(const HashMap& rhs) : HashMap(rhs.bucket_count(), rhs._hash_function) {
+    for (auto [key, value] : rhs) {
+        insert({key, value});
+    }
+}
+
+// copy assignment operator
+template <typename K, typename M, typename H>
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(const HashMap& rhs) {
     if (&rhs == this) return *this;
     clear();
-    for(auto [key, value] : rhs) {
+    for (auto [key, value] : rhs) {
         insert({key, value});
     }
     return *this;
 }
 
+// move constructor
 template <typename K, typename M, typename H>
-HashMap<K, M, H>::HashMap(HashMap&& rhs) : 
-    _size(std::move(rhs._size)),
-    _hash_function(std::move(rhs._hash_function)),
+HashMap<K, M, H>::HashMap(HashMap&& rhs) :
+    _size{std::move(rhs._size)},
+    _hash_function{std::move(rhs._hash_function)},
     _buckets_array{rhs.bucket_count(), nullptr} {
     for (size_t i = 0; i < rhs.bucket_count(); i++) {
         _buckets_array[i] = std::move(rhs._buckets_array[i]);
@@ -110,8 +125,9 @@ HashMap<K, M, H>::HashMap(HashMap&& rhs) :
     rhs._size = 0;
 }
 
+// move assignment operator
 template <typename K, typename M, typename H>
-HashMap<K, M, H>& HashMap<K, M, H>::operator=(HashMap<K, M, H>&& rhs) {
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(HashMap&& rhs) {
     if (this != &rhs) {
         clear();
         _size = std::move(rhs._size);
@@ -237,11 +253,11 @@ template <typename K, typename M, typename H>
 
 template <typename K, typename M, typename H>
 void HashMap<K, M, H>::rehash(size_t new_bucket_count) {
-if (new_bucket_count == 0) {
-    throw std::out_of_range("HashMap<K, M, H>::rehash: new_bucket_count must be positive.");
-}
+    if (new_bucket_count == 0) {
+        throw std::out_of_range("HashMap<K, M, H>::rehash: new_bucket_count must be positive.");
+    }
 
-std::vector<node*> new_buckets_array(new_bucket_count, nullptr);
+    std::vector<node*> new_buckets_array(new_bucket_count, nullptr);
     for (auto& curr : _buckets_array) { // short answer question is asking about this 'curr'
         while (curr != nullptr) {
             const auto& [key, mapped] = curr->value;

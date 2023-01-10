@@ -265,7 +265,8 @@ public:
      *
      * Complexity: O(1) amortized average case, O(N) worst case, N = number of elements
      */
-    iterator find(const K& key) const;
+    iterator find(const K& key);
+    const_iterator find(const K& key) const;
 
     /*
     * Inserts the K/M pair into the HashMap, if the key does not already exist.
@@ -463,6 +464,21 @@ public:
 
     /* Milestone 2 headers (you need to declare these) */
     // TODO: declare headers for copy constructor/assignment, move constructor/assignment
+    /*
+     * Copy constructor
+     * Creates a HashMap with the elements in the rhs HashMap
+     *
+     * Requirements: the rhs HashMap should have the same <K, M, H>.
+     *
+     * Usage:
+     * 		HashMap<char, int> rhs{{'a', 3}, {'b', 4}, {'c', 5}};
+     * 		HashMap<char, int> map(rhs);
+     *
+     * Complexity: O(N), where N = rhs.size();
+     *
+     */
+    HashMap(const HashMap& rhs);
+    
     /*
      * Copy assignment operator
      * copy the elements on the rhs of the assignment into the lhs HashMap

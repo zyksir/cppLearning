@@ -1387,7 +1387,7 @@ void C_copy_edge() {
         /* 2. Basic self-assignment */
         // suppress the really annoying warnings
         #pragma GCC diagnostic push
-        // #pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+        #pragma GCC diagnostic ignored "-Wself-assign-overloaded"
         HashMap<std::string, int> map;
         std::unordered_map<std::string, int> answer;
         map = map;
@@ -1431,7 +1431,7 @@ void C_copy_edge() {
         /* 3. Expanded self-assignment */
         // suppress the really annoying warnings
         #pragma GCC diagnostic push
-        // #pragma GCC diagnostic ignored "-Wself-assign-overloaded"
+        #pragma GCC diagnostic ignored "-Wself-assign-overloaded"
         HashMap<std::string, int> map1;
         HashMap<std::string, int> map2;
         map1.insert({"A", 1});
@@ -1549,7 +1549,7 @@ void F_move_edge() {
         /* 2. Basic self-assignment */
         // suppress the really annoying warnings
         #pragma GCC diagnostic push
-        // #pragma GCC diagnostic ignored "-Wself-move"
+        #pragma GCC diagnostic ignored "-Wself-move"
         HashMap<std::string, int> map;
         std::unordered_map<std::string, int> answer;
 
@@ -1592,7 +1592,7 @@ void F_move_edge() {
         /* 3. Expanded self-assignment */
         // suppress the really annoying warnings
         #pragma GCC diagnostic push
-        // #pragma GCC diagnostic ignored "-Wself-move"
+        #pragma GCC diagnostic ignored "-Wself-move"
         HashMap<std::string, int> map1;
         HashMap<std::string, int> map2;
         map1.insert({"A", 1});
@@ -1617,7 +1617,7 @@ void F_move_edge() {
         HashMap<std::string, int> temp, new_assign;
         temp = std::move(map1);
         new_assign = std::move(temp);
-        VERIFY_TRUE(check_map_equal(new_assign, temp), __LINE__);
+        VERIFY_TRUE(check_map_equal(new_assign, copy), __LINE__);
     }
 }
 #endif
@@ -1853,6 +1853,7 @@ int A_benchmark_insert_erase() {
 }
 
 int B_benchmark_find() {
+    #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
     cout << "Task: find N elements (random hit/miss), measured in ns." << '\n';
     auto good_hash_function = [](const int& key) {
        return (key * 43037 + 52081) % 79229;
@@ -1922,6 +1923,7 @@ int B_benchmark_find() {
 }
 
 int C_benchmark_iterate() {
+    #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
     cout << "Task: iterate over all N elements, measured in ns." << '\n';
     auto good_hash_function = [](const int& key) {
        return (key * 43037 + 52081) % 79229;
