@@ -41,12 +41,17 @@ inline size_t HashMap<K, M, H>::bucket_count() const noexcept {
 };
 
 template <typename K, typename M, typename H>
-M& HashMap<K, M, H>::at(const K& key) const {
+M& HashMap<K, M, H>::at(const K& key) {
     auto [prev, node_found] = find_node(key);
             if (node_found == nullptr) {
         throw std::out_of_range("HashMap<K, M, H>::at: key not found");
     }
     return node_found->value.second;
+}
+
+template <typename K, typename M, typename H>
+const M& HashMap<K, M, H>::at(const K& key) const {
+    return static_cast<const M&>(const_cast<HashMap<K, M, H>*>(this)->at(key));
 }
 
 template <typename K, typename M, typename H>
@@ -91,55 +96,6 @@ std::pair<typename HashMap<K, M, H>::iterator, bool> HashMap<K, M, H>::insert(co
 
     ++_size;
     return {make_iterator(temp), true};
-}
-
-// copy constructor
-template <typename K, typename M, typename H>
-HashMap<K, M, H>::HashMap(const HashMap& rhs) : HashMap(rhs.bucket_count(), rhs._hash_function) {
-    for (auto [key, value] : rhs) {
-        insert({key, value});
-    }
-}
-
-// copy assignment operator
-template <typename K, typename M, typename H>
-HashMap<K, M, H>& HashMap<K, M, H>::operator=(const HashMap& rhs) {
-    if (&rhs == this) return *this;
-    clear();
-    for (auto [key, value] : rhs) {
-        insert({key, value});
-    }
-    return *this;
-}
-
-// move constructor
-template <typename K, typename M, typename H>
-HashMap<K, M, H>::HashMap(HashMap&& rhs) :
-    _size{std::move(rhs._size)},
-    _hash_function{std::move(rhs._hash_function)},
-    _buckets_array{rhs.bucket_count(), nullptr} {
-    for (size_t i = 0; i < rhs.bucket_count(); i++) {
-        _buckets_array[i] = std::move(rhs._buckets_array[i]);
-        rhs._buckets_array[i] = nullptr;
-    }
-    rhs._size = 0;
-}
-
-// move assignment operator
-template <typename K, typename M, typename H>
-HashMap<K, M, H>& HashMap<K, M, H>::operator=(HashMap&& rhs) {
-    if (this != &rhs) {
-        clear();
-        _size = std::move(rhs._size);
-        _hash_function = std::move(rhs._hash_function);
-        _buckets_array.resize(rhs.bucket_count());
-        for (size_t i = 0; i < rhs.bucket_count(); i++) {
-            _buckets_array[i] = std::move(rhs._buckets_array[i]);
-            rhs._buckets_array[i] = nullptr;
-        }
-        rhs._size = 0;
-    }
-    return *this;
 }
 
 template <typename K, typename M, typename H>
@@ -313,5 +269,54 @@ std::ostream& operator<<(std::ostream& os, const HashMap<K, M, H>& rhs) {
 }
 
 /* Begin Milestone 2: Special Member Functions */
+// copy constructor
+template <typename K, typename M, typename H>
+HashMap<K, M, H>::HashMap(const HashMap& rhs) : HashMap(rhs.bucket_count(), rhs._hash_function) {
+    for (auto [key, value] : rhs) {
+        insert({key, value});
+    }
+}
+
+// copy assignment operator
+template <typename K, typename M, typename H>
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(const HashMap& rhs) {
+    if (&rhs == this) return *this;
+    clear();
+    for (auto [key, value] : rhs) {
+        insert({key, value});
+    }
+    return *this;
+}
+
+// move constructor
+template <typename K, typename M, typename H>
+HashMap<K, M, H>::HashMap(HashMap&& rhs) :
+    _size{std::move(rhs._size)},
+    _hash_function{std::move(rhs._hash_function)},
+    _buckets_array{rhs.bucket_count(), nullptr} {
+    for (size_t i = 0; i < rhs.bucket_count(); i++) {
+        _buckets_array[i] = std::move(rhs._buckets_array[i]);
+        rhs._buckets_array[i] = nullptr;
+    }
+    rhs._size = 0;
+}
+
+// move assignment operator
+template <typename K, typename M, typename H>
+HashMap<K, M, H>& HashMap<K, M, H>::operator=(HashMap&& rhs) {
+    if (this != &rhs) {
+        clear();
+        _size = std::move(rhs._size);
+        _hash_function = std::move(rhs._hash_function);
+        _buckets_array.resize(rhs.bucket_count());
+        for (size_t i = 0; i < rhs.bucket_count(); i++) {
+            _buckets_array[i] = std::move(rhs._buckets_array[i]);
+            rhs._buckets_array[i] = nullptr;
+        }
+        rhs._size = 0;
+    }
+    return *this;
+}
+
 
 /* end student code */

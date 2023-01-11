@@ -115,8 +115,8 @@ void D_at() {
     /*
     * Tests whether at correctly returns a reference.
     */
-    std::unordered_map<std::string, int> answer;
-    HashMap<std::string, int> map;
+    std::unordered_map<std::string, int> map;
+    HashMap<std::string, int> answer;
     answer.insert({"A", 42});
     answer.insert({"B", 137});
     answer.insert({"C", -1});
@@ -152,7 +152,7 @@ void D_at() {
     map2.insert({"Exists", 4});
     VERIFY_TRUE(map2.contains("Exists"), __LINE__);
     VERIFY_TRUE(!map2.contains("Does not exist"), __LINE__);
-    correct_exception = true;
+    correct_exception = false;
     try {
         map2.at("Does not exist") = 5;
     } catch (const std::out_of_range& e) {
@@ -2022,19 +2022,19 @@ void run_test_harness() {
     cout << "----- CS 106L SIMPLE TEST HARNESS -----" << '\n';
     cout << "Written by Avery Wang (2019-2020 lecturer)" << '\n' << '\n';
     int required_pass = 0;
-    // int bonus_pass = 0;
-    // cout << "----- Milestone 1 Tests (Starter) -----" << '\n';
-    // required_pass += run_milestone1_tests();
-    // cout << '\n' << "----- Milestone 2 Tests (Optional) -----" << '\n';
-    // bonus_pass += run_milestone2_tests();
-    // cout << '\n' << "----- Milestone 3 Tests (Required) -----" << '\n';
-    // required_pass += run_milestone3_tests();
+    int bonus_pass = 0;
+    cout << "----- Milestone 1 Tests (Starter) -----" << '\n';
+    required_pass += run_milestone1_tests();
+    cout << '\n' << "----- Milestone 2 Tests (Optional) -----" << '\n';
+    bonus_pass += run_milestone2_tests();
+    cout << '\n' << "----- Milestone 3 Tests (Required) -----" << '\n';
+    required_pass += run_milestone3_tests();
     cout << '\n' << "----- Milestone 2 Tests -----" << '\n';
     //Note to reader: The modified version of this assignment only has two milestones
     //Old milestone4 = new mmilestone2!
     required_pass += run_milestone4_tests();
     // cout << '\n' << "----- Benchmark Tests (Optional) -----" << '\n';
-    // bonus_pass += run_benchmark();
+    bonus_pass += run_benchmark();
     cout << '\n' << "----- Test Harness Summary -----" << '\n';
     cout << "Required Tests passed: " << required_pass << "/8" << '\n';
     // cout << "Optional Tests passed: " << bonus_pass << "/7" << '\n';
