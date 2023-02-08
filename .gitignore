@@ -1,4 +1,6 @@
 *build
 *vcpkg
 *build_and_run.sh
-*.DS_Store
+*.DS_Store*
+*.vscode*
+*library/*

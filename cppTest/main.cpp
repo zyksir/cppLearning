@@ -3,31 +3,16 @@
 #include<deque>
 using namespace std;
 
-vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-    int n = nums.size();
-    deque<int> q;
-    for(int i = 0; i < k; ++i) {
-        while(!q.empty() && nums[i] >= nums[q.back()]) {
-            q.pop_back();
-        }
-        q.push_back(i);
-    }
-    vector<int> ans;
-    ans.reserve(n - k + 1);
-    ans.emplace_back(nums[q.front()]);
-    for(int i = k; i < n; ++i) {
-        while(!q.empty() && nums[i] >= nums[q.back()]) {
-            q.pop_back();
-        }
-        while(!q.empty() && q.front() <= i - k) {
-            q.pop_front();
-        }
-        q.push_back(i);
-        ans.emplace_back(nums[q.front()]);
-    }
-    return ans;
-}
-
 int main() {
+    pair<int, int> p = {1, 1};
+    auto& [x, y] = p;
+    x++; y += 2;
+    cout << p.first << "\t" << p.second << endl;
+
+    int a = 1;
+    int& b = a;
+    auto c = b;
+    c++;
+    cout << c << "\t" << b << "\t" <<  a << endl;
     return 0;
 }
