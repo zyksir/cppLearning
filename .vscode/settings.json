@@ -78,6 +78,11 @@
         "unordered_set": "cpp",
         "fstream": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "execution": "cpp",
+        "stdlib.h": "c",
+        "criterion.h": "c",
+        "time.h": "c",
+        "format": "c"
     }
 }

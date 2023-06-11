@@ -1,1 +1,0 @@
-g++ -Wall -Werror -std=c++17 word_count.cpp -o word_count
