@@ -83,6 +83,17 @@
         "stdlib.h": "c",
         "criterion.h": "c",
         "time.h": "c",
-        "format": "c"
+        "format": "c",
+        "__verbose_abort": "cpp",
+        "bit": "cpp",
+        "charconv": "cpp",
+        "numbers": "cpp",
+        "*.tcc": "cpp",
+        "cinttypes": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "semaphore": "cpp",
+        "span": "cpp",
+        "stop_token": "cpp"
     }
 }
