@@ -2,7 +2,7 @@
 #include <thread>
 #include <future>
 #include <numeric>
-#include "helper.h"
+#include "wrapper/wrapper.h"
 
 namespace test {
 
@@ -12,17 +12,9 @@ uint64_t calcUsingNaiveLoop(const std::vector<int>& randValues) {
     return sum;
 }
 
-void functionWrapper(decltype(calcUsingNaiveLoop) calcSumFunction, std::vector<int>& randValues, std::string name) {
-    auto sta = std::chrono::steady_clock::now();
-    auto sum = calcSumFunction(randValues);
-    std::chrono::duration<double> duration = std::chrono::steady_clock::now() - sta;
-    std::cout << "[" << name << "]\tResult:" << sum << "\tTimeCost:" << duration.count() << std::endl;
-}
-
 uint64_t calcUsingStdAccumulate(const std::vector<int>& randValues) {
     unsigned long long sum = {};
     sum = std::accumulate(randValues.begin(), randValues.end(), 0L);
-    std::cout << sum << std::endl;
     return sum;
 }
 
@@ -104,20 +96,4 @@ uint64_t calcUsingTask(const std::vector<int>& randValues) {
     return sum;
 }
 
-}
-
-std::vector<int> randValues;
-int main() {
-    test::init_random_vector(std::ref(randValues));
-    test::functionWrapper(test::calcUsingNaiveLoop, std::ref(randValues), "calcUsingSingleLoop");
-    test::functionWrapper(test::calcUsingStdAccumulate, std::ref(randValues), "calcUsingStdAccumulate");
-    test::functionWrapper(test::calcUsingMutex, std::ref(randValues), "calcUsingMutex");
-    test::functionWrapper(test::calcUsingAtomic, std::ref(randValues), "calcUsingAtomic");
-    test::functionWrapper(test::calcUsingTask, std::ref(randValues), "calcUsingTasks");
-
-    // test::calcUsingSingleLoop(std::ref(randValues));
-    // test::calcUsingMutex(std::ref(randValues));
-    // test::calcUsingAtomicLoop(std::ref(randValues));
-    // test::calcUsingTasks(std::ref(randValues));
-    return 0;
 }
